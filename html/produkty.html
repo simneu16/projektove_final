@@ -600,6 +600,11 @@
       }
     }
 
+    function getImageUrl(link) {
+      if (link.startsWith('http')) return link;
+      return `https://unitmate.sk/${link.replace(/^(\.\.\/)*/, '')}`;
+    }
+
     function renderProducts(productsToRender) {
       const grid = document.getElementById('productsGrid');
       const noResults = document.getElementById('noResults');
@@ -616,7 +621,7 @@
       grid.innerHTML = productsToRender.map(product => `
             <div class="product-card" onclick="goToProductDetail(${JSON.stringify(product).replace(/"/g, '&quot;')})">
                 <div class="product-image">
-                    <img src="${product.photo_link}" alt="${product.name}">
+                    <img src="${getImageUrl(product.photo_link)}" alt="${product.name}">
                 </div>
                 <div class="product-info">
                     <h3 class="product-name">${product.name}</h3>
