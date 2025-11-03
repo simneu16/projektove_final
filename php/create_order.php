@@ -52,7 +52,7 @@ try {
         $billingInfo = json_encode($data['billing_information']);
 
         // Insert order into orders table
-        $orderSql = 'INSERT INTO orders (status, created_date, preffered_date, total_price, install_package, user_id, delivery_adress, billing_information) 
+        $orderSql = 'INSERT INTO orders (status, created_date, preferred_date, total_price, install_package, user_id, delivery_adress, billing_information) 
                      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "ID"';
 
         $orderParams = array(
