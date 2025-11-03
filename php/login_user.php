@@ -21,7 +21,6 @@ try {
         throw new Exception("Invalid JSON data received");
     }
 
-    // Validate required fields
     if (empty($data['login']) || empty($data['password'])) {
         throw new Exception("Missing login credentials");
     }
@@ -29,21 +28,18 @@ try {
     // Connect to database
     $conn_string = "host=$host port=$port dbname=$dbname user=$user password=$pass";
     $conn = pg_connect($conn_string);
-
     if (!$conn) {
         throw new Exception("Database connection failed");
     }
 
-    // Prepare SQL query to fetch user
-    $sql = 'SELECT id, firstname, lastname, login, password, role FROM users WHERE login = $1';
-    $result = pg_query_params($conn, $sql, array($data['login']));
-
+    // Fetch user
+    $sql = 'SELECT id, firstname, lastname, login, password, role, email, telephone, address FROM users WHERE login = $1';
+    $result = pg_query_params($conn, $sql, [$data['login']]);
     if (!$result) {
         throw new Exception("Query failed");
     }
 
     $user = pg_fetch_assoc($result);
-
     if (!$user) {
         echo json_encode(['success' => false, 'message' => 'Nesprávne používateľské meno alebo heslo']);
         exit;
@@ -51,9 +47,8 @@ try {
 
     // Verify password
     if (password_verify($data['password'], $user['password'])) {
-        // Start session and store user data
         session_start();
-        $_SESSION['user_id'] = $user['ID'];
+        $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['user_name'] = $user['firstname'] . ' ' . $user['lastname'];
 
@@ -61,12 +56,14 @@ try {
             'success' => true,
             'message' => 'Prihlásenie úspešné',
             'user' => [
-                'id' => $user['ID'],
-                'name' => $user['firstname'] . ' ' . $user['lastname'],
+                'id' => $user['id'],
                 'firstname' => $user['firstname'],
                 'lastname' => $user['lastname'],
                 'login' => $user['login'],
-                'role' => $user['role']
+                'role' => $user['role'],
+                'email' => $user['email'],
+                'telephone' => $user['telephone'],
+                'address' => $user['address']
             ]
         ]);
     } else {
