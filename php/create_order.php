@@ -53,7 +53,7 @@ try {
 
         // Insert order into orders table
         $orderSql = 'INSERT INTO orders (status, created_date, preferred_date, total_price, install_package, user_id, delivery_adress, billing_information) 
-                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "ID"';
+                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id';
 
         $orderParams = array(
             'pending',  // status
@@ -73,7 +73,7 @@ try {
         }
 
         $orderRow = pg_fetch_assoc($orderResult);
-        $orderId = $orderRow['ID'];
+        $orderId = $orderRow['id'];
 
         // Insert order items
         foreach ($data['items'] as $item) {
