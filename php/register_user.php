@@ -57,8 +57,10 @@ try {
     $result = pg_query_params($conn, $sql, $params);
 
     if (!$result) {
-        throw new Exception(pg_last_error($conn));
-    }
+    $err = pg_last_error($conn);
+    error_log("DB ERROR: " . $err);
+    throw new Exception("Database query failed: " . $err);
+}
 
     echo json_encode(['success' => true, 'message' => 'User registered successfully']);
 
