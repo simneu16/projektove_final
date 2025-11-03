@@ -28,7 +28,7 @@ RUN echo "upload_max_filesize=20M" > /usr/local/etc/php/conf.d/uploads.ini \
     && echo "max_execution_time=60" >> /usr/local/etc/php/conf.d/uploads.ini
 
 
-EXPOSE 80
+EXPOSE ${PORT}
 
 
 CMD ["apache2-foreground"]
