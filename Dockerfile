@@ -14,6 +14,8 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 RUN a2enmod rewrite
 
+ENV PORT=8080
+RUN sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
 
 COPY . /var/www/html/
 
